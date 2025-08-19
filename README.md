@@ -89,7 +89,7 @@ E-Commerce-with-Azure/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/E-Commerce-with-Azure.git
+
    cd E-Commerce-with-Azure
    ```
 
@@ -133,8 +133,6 @@ E-Commerce-with-Azure/
 # Login to Azure
 az login
 
-# Set subscription
-az account set --subscription "your-subscription-id"
 
 # Initialize Terraform
 cd infra
