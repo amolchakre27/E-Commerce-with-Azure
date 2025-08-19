@@ -2,7 +2,7 @@
 
 A modern, scalable e-commerce platform built with microservices architecture and deployed on Microsoft Azure using Kubernetes and Infrastructure as Code (IaC).
 
-## 🚀 Features
+## Features
 
 - **Microservices Architecture**: Separate frontend and backend services
 - **Containerized Deployment**: Docker containers orchestrated with Kubernetes
@@ -11,7 +11,7 @@ A modern, scalable e-commerce platform built with microservices architecture and
 - **Scalable & Resilient**: Auto-scaling and high availability configurations
 - **Cloud-Native**: Leveraging Azure Kubernetes Service (AKS) and Azure Container Registry
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 E-Commerce-with-Azure/
@@ -31,7 +31,7 @@ E-Commerce-with-Azure/
 └── README.md
 ```
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 ### Frontend
 - **Framework**: React/Angular/Vue.js
@@ -52,7 +52,7 @@ E-Commerce-with-Azure/
 - **IaC**: Terraform
 - **CI/CD**: Azure DevOps Pipelines
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────┐     ┌─────────────────┐
@@ -75,7 +75,7 @@ E-Commerce-with-Azure/
 └─────────────────┘     └─────────────────┘
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -125,7 +125,7 @@ E-Commerce-with-Azure/
    docker run -p 5000:5000 ecommerce-backend
    ```
 
-## ☁️ Azure Deployment
+##  Azure Deployment
 
 ### 1. Infrastructure Setup
 
@@ -171,7 +171,7 @@ kubectl apply -f kubernetes/frontend-deployment.yaml
 kubectl apply -f kubernetes/kubernetes/backend-deployment.yaml
 ```
 
-## 🔧 Configuration
+##  Configuration
 
 ### Environment Variables
 
@@ -192,7 +192,7 @@ kubectl create secret generic app-secrets \
   --from-literal=jwt-secret=your-secret-key
 ```
 
-## 📊 Monitoring & Observability
+##  Monitoring & Observability
 
 ### Application Insights
 - **Frontend**: Browser telemetry and user analytics
@@ -204,7 +204,7 @@ kubectl create secret generic app-secrets \
 - Custom dashboards and alerts
 - Performance metrics and SLA tracking
 
-## 🔐 Security
+##  Security
 
 - **Authentication**: Azure Active Directory integration
 - **Authorization**: Role-based access control (RBAC)
@@ -212,7 +212,7 @@ kubectl create secret generic app-secrets \
 - **Network**: Azure Firewall and NSG rules
 - **Container**: Azure Container Registry vulnerability scanning
 
-## 🧪 Testing
+##  Testing
 
 ### Unit Tests
 ```bash
@@ -235,7 +235,7 @@ npm run test:integration
 az load test create --test-id ecommerce-load-test
 ```
 
-## 📈 Scaling
+##  Scaling
 
 ### Horizontal Pod Autoscaler
 ```yaml
@@ -263,7 +263,7 @@ spec:
 - Automatically scales AKS nodes based on resource demands
 - Configured through Terraform in `infra/main.tf`
 
-## 🔄 CI/CD Pipeline
+##  CI/CD Pipeline
 
 ### Azure DevOps Pipeline
 - **Trigger**: On push to main branch
@@ -278,7 +278,7 @@ spec:
 ### Pipeline Configuration
 See `azure-pipelines.yml` for complete pipeline configuration.
 
-## 📝 API Documentation
+##  API Documentation
 
 ### Backend Endpoints
 
@@ -298,7 +298,7 @@ See `azure-pipelines.yml` for complete pipeline configuration.
 - Swagger UI available at
 - OpenAPI 3.0 specification at
 
-## 🚢 Deployment Environments
+##  Deployment Environments
 
 | Environment | URL | Description |
 |-------------|-----|-------------|
@@ -310,7 +310,7 @@ See `azure-pipelines.yml` for complete pipeline configuration.
 
 
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [ ] Multi-region deployment
 - [ ] GraphQL API implementation
