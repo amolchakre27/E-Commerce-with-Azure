@@ -1,0 +1,104 @@
+# A single YAML file for both CI and CD.
+
+trigger:
+- develop
+
+pr:
+- develop
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: 'your-key-vault-secrets' # Link to your Key Vault variable group
+- name: 'dockerRegistryServiceConnection'
+  value: 'your-acr-service-connection'
+- name: 'dockerRegistry'
+  value: 'youracrname.azurecr.io'
+- name: 'imageRepositoryFrontend'
+  value: 'frontend-app'
+- name: 'imageRepositoryBackend'
+  value: 'backend-app'
+- name: 'tag'
+  value: '$(Build.BuildId)'
+
+stages:
+- stage: BuildAndTest
+  displayName: 'CI - Build and Test'
+  jobs:
+  - job: BuildDockerImages
+    displayName: 'Build Docker Images'
+    steps:
+    - task: Docker@2
+      displayName: 'Build and push backend image'
+      inputs:
+        command: 'buildAndPush'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepositoryBackend)'
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: 'Build and push frontend image'
+      inputs:
+        command: 'buildAndPush'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepositoryFrontend)'
+        tags: |
+          $(tag)
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: drop
+
+- stage: DeployToStaging
+  displayName: 'CD - Deploy to Staging'
+  dependsOn: BuildAndTest
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: 'staging'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@1
+            displayName: 'Deploy to Staging Environment'
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'your-aks-service-connection'
+              manifests: |
+                $(System.DefaultWorkingDirectory)/kubernetes/frontend-deployment.yaml
+                $(System.DefaultWorkingDirectory)/kubernetes/backend-deployment.yaml
+              imagePullSecrets: 'acr-secret' # Kubernetes secret for ACR credentials
+              containers: |
+                $(dockerRegistry)/$(imageRepositoryFrontend):$(tag)
+                $(dockerRegistry)/$(imageRepositoryBackend):$(tag)
+
+- stage: DeployToProduction
+  displayName: 'CD - Deploy to Production'
+  dependsOn: DeployToStaging
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: ManualValidation@0
+            displayName: 'Manual Approval for Production'
+            inputs:
+              instructions: 'Review staging environment and approve deployment to production.'
+          - task: KubernetesManifest@1
+            displayName: 'Deploy to Production Environment'
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'your-aks-service-connection'
+              manifests: |
+                $(System.DefaultWorkingDirectory)/kubernetes/frontend-deployment.yaml
+                $(System.DefaultWorkingDirectory)/kubernetes/backend-deployment.yaml
+              imagePullSecrets: 'acr-secret'
+              containers: |
+                $(dockerRegistry)/$(imageRepositoryFrontend):$(tag)
+                $(dockerRegistry)/$(imageRepositoryBackend):$(tag)
